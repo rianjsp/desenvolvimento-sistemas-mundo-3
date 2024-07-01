@@ -1,1 +1,1 @@
-![Design sem nome](https://github.com/rianjsp/desenvolvimento-sistemas/assets/116752833/8172ba1c-5ca5-4283-aa9e-a6ac0f3a3a15)
+![Desenvolvendo o futuro da tecnologia na cidade do queijo e do pão de queijo - Belo Horizonte! 🚀](https://github.com/rianjsp/desenvolvimento-sistemas/assets/116752833/be51240a-7d96-4acb-ae70-4e566f6bec6b)
