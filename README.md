@@ -11,7 +11,3 @@
 
 Este é o meu repositório dedicado à organização dos trabalhos e atividades do 3° semestre letivo, inspirado em um ambiente gameficado de aprendizado.
 
-### **Tecnologias Relacionadas:**
-
-- Java
-- Banco de Dados
