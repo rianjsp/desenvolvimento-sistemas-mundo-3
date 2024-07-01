@@ -7,6 +7,6 @@
 - **Matrícula:** 202202923931
 - **Turma:** 2023.1
 
-# **Repositório do Mundo 3 **
+# `Repositório do Mundo 3`
 
 Este é o meu repositório dedicado à organização dos trabalhos e atividades do 3° semestre letivo, inspirado em um ambiente gameficado de aprendizado.
