@@ -1,94 +1,229 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package cadastropoo;
 
-//Imports 
 import model.PessoaFisica;
 import model.PessoaFisicaRepo;
 import model.PessoaJuridica;
 import model.PessoaJuridicaRepo;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-/**
- *
- * @author Rian Joseph
- */
 public class CadastroPOO {
 
-    /**
-     * @param args the command line arguments
-     */
-    
-    // Metodo Main
-    public static void main(String[] args){
-        // Repositorio de pessoas fisicas repo_01
-        PessoaFisicaRepo repo_01 = new PessoaFisicaRepo();
-        
-        // Add 4 pesssoas fisicas utilizando o construtor completo
-        repo_01.inserir(new PessoaFisica(1, "Joao Silva", "123.456.789.10", 38));
-        repo_01.inserir(new PessoaFisica(2, "Maria Alves", "453.336.459.20", 45));
-        repo_01.inserir(new PessoaFisica(3, "Marta Rosa", "673.357.789.10", 26));
-        repo_01.inserir(new PessoaFisica(4, "Caio Artur", "231.456.689.23", 24));
-        
-        // Persistindo os dados do repo_01 em um arqv
-        String arquivoFisicas = "pessoas_fisicas.dat";
-        try {
-            repo_01.persistir(arquivoFisicas);
-            System.out.println("Dados de Pessoa fisica armazenados.");
-        } catch (IOException e) {
-            System.out.println("Aconteceu um erro ao persistir dados de pessoas fisicas: " + e.getMessage());
-        }
-        
-        //Repositorio de pessoas fisicas repo_02
-        PessoaFisicaRepo repo_02 = new PessoaFisicaRepo();
-        try {
-            repo_02.recuperar(arquivoFisicas);
-            System.out.println("Dados de Pessoa fisicas Recuperados.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Aconteceu um erro ao recuperar dados de pessoas fisicas: " + e.getMessage());
-        }
-        
-        // Exibindo os dados 
-        ArrayList<PessoaFisica> pessoasFisicas = repo_02.obterTodos();
-        for(PessoaFisica pessoa : pessoasFisicas)
-        {
-            pessoa.exibir();
-        }
-        
-        // Repositorio de pessoas juridicas repo_03
-        PessoaJuridicaRepo repo_03 = new PessoaJuridicaRepo();
-        
-        // Adicionando 2 pessoas utilizando o construtor completo
-        repo_03.inserir(new PessoaJuridica(1, "Empresa Primeira", "12.345.678/0001-99"));
-        repo_03.inserir(new PessoaJuridica(2, "Empresa Segunda", "12.345.678/0002-88"));
-        
-        // Persistindo os dados do repo_03 em um arqv
-        String arquivoJuridicas = "pessoas_juridicas.dat";
-        try {
-            repo_03.persistir(arquivoJuridicas);
-            System.out.println("Dados de pessoas juridicas armazenados.");
-        } catch (IOException e) {
-            System.out.println("Aconteceu um erro ao armazenar dados de pessoas juridicas: " + e.getMessage());
-        }
-        
-        // Repositorio de pessoas juridicas repo_04
-        PessoaJuridicaRepo repo_04 = new PessoaJuridicaRepo();
-        try {
-            repo_04.recuperar(arquivoJuridicas);
-            System.out.println("Dados de pessoas juridicas recuperados com sucesso.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Aconteceu um erro ao recuperar dados de pessoas juridicas: " + e.getMessage());
-        }
-        
-        // Exibindo os dados
-        ArrayList<PessoaJuridica> pessoasJuridicas = repo_04.obterTodos();
-        for (PessoaJuridica pessoa : pessoasJuridicas) {
-            pessoa.exibir();
-        }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        PessoaFisicaRepo repoFisica = new PessoaFisicaRepo();
+        PessoaJuridicaRepo repoJuridica = new PessoaJuridicaRepo();
+
+        int opcao;
+        do {
+            System.out.println("===============================");
+            System.out.println("Escolha uma opcao:");
+            System.out.println("1 - Incluir Pessoa");
+            System.out.println("2 - Alterar Pessoa");
+            System.out.println("3 - Excluir Pessoa");
+            System.out.println("4 - Buscar pelo ID");
+            System.out.println("5 - Exibir todos");
+            System.out.println("6 - Persistir dados");
+            System.out.println("7 - Recuperar dados");
+            System.out.println("0 - Finalizar programa");
+            System.out.println("===============================");
+
+            while (true) {
+                try {
+                    opcao = scanner.nextInt();
+                    scanner.nextLine(); 
+                    break; 
+                } catch (InputMismatchException e) {
+                    System.out.println("Insira um numero valido.");
+                    scanner.nextLine(); 
+                }
+            }
+
+            switch (opcao) {
+                case 1: // Incluir
+                    System.out.println("F - Fisica | J - Juridica):");
+                    String tipoInclusao = scanner.nextLine().toUpperCase();
+                    if (tipoInclusao.equals("F")) {
+                        System.out.print("Digite o ID da pessoa: ");
+                        int id = scanner.nextInt();
+                        scanner.nextLine();
+
+                        if (repoFisica.obter(id) != null) {
+                            System.out.println("ID ja existe. Escolha um ID unico.");
+                            break;
+                        }
+
+                        System.out.print("Digite o nome da pessoa: ");
+                        String nome = scanner.nextLine();
+                        System.out.print("Digite o CPF da pessoa: ");
+                        String cpf = scanner.nextLine();
+                        System.out.print("Digite a idade da pessoa: ");
+                        int idade = scanner.nextInt();
+                        repoFisica.inserir(new PessoaFisica(id, nome, cpf, idade));
+                        System.out.println("Pessoa Fisica cadastrada com sucesso!");
+                    } else if (tipoInclusao.equals("J")) {
+                        System.out.print("Digite o ID da pessoa: ");
+                        int id = scanner.nextInt();
+                        scanner.nextLine();
+
+                        if (repoJuridica.obter(id) != null) {
+                            System.out.println("ID ja existe. Escolha um ID unico.");
+                            break;
+                        }
+
+                        System.out.print("Digite o nome da pessoa: ");
+                        String nome = scanner.nextLine();
+                        System.out.print("Digite o CNPJ da pessoa: ");
+                        String cnpj = scanner.nextLine();
+                        repoJuridica.inserir(new PessoaJuridica(id, nome, cnpj));
+                        System.out.println("Pessoa Juridica cadastrada com sucesso!");
+                    } else {
+                        System.out.println("Tipo invalido. Escolha 'F' ou 'J'.");
+                    }
+                    break;
+
+                case 2: // Alterar
+                    System.out.println("F - Fisica | J - Juridica):");
+                    String tipoAlteracao = scanner.nextLine().toUpperCase();
+                    System.out.print("Digite o ID: ");
+                    int idAlterar = scanner.nextInt();
+                    scanner.nextLine();
+                    if (tipoAlteracao.equals("F")) {
+                        PessoaFisica pessoa = repoFisica.obter(idAlterar);
+                        if (pessoa != null) {
+                            System.out.println("Dados atuais: " + pessoa);
+                            System.out.print("Digite o novo nome: ");
+                            String novoNome = scanner.nextLine();
+                            System.out.print("Digite o novo CPF: ");
+                            String novoCpf = scanner.nextLine();
+                            System.out.print("Digite a nova idade: ");
+                            int novaIdade = scanner.nextInt();
+                            pessoa.setNome(novoNome);
+                            pessoa.setCpf(novoCpf);
+                            pessoa.setIdade(novaIdade);
+                            repoFisica.alterar(pessoa);
+                            System.out.println("Pessoa Fisica alterada com sucesso!");
+                        } else {
+                            System.out.println("Pessoa nao encontrada.");
+                        }
+                    } else if (tipoAlteracao.equals("J")) {
+                        PessoaJuridica pessoa = repoJuridica.obter(idAlterar);
+                        if (pessoa != null) {
+                            System.out.println("Dados atuais: " + pessoa);
+                            System.out.print("Digite o novo nome: ");
+                            String novoNome = scanner.nextLine();
+                            System.out.print("Digite o novo CNPJ: ");
+                            String novoCnpj = scanner.nextLine();
+                            pessoa.setNome(novoNome);
+                            pessoa.setCnpj(novoCnpj);
+                            repoJuridica.alterar(pessoa);
+                            System.out.println("Pessoa Juridica alterada com sucesso!");
+                        } else {
+                            System.out.println("Pessoa nao encontrada.");
+                        }
+                    } else {
+                        System.out.println("Tipo invalido. Escolha 'F' ou 'J'.");
+                    }
+                    break;
+
+                case 3: // Excluir
+                    System.out.println("F - Fisica | J - Juridica):");
+                    String tipoExclusao = scanner.nextLine().toUpperCase();
+                    System.out.print("Digite o ID: ");
+                    int idExcluir = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    if (tipoExclusao.equals("F")) {
+                        repoFisica.excluir(idExcluir);
+                        System.out.println("Pessoa Fisica excluida.");
+                    } else if (tipoExclusao.equals("J")) {
+                        repoJuridica.excluir(idExcluir);
+                        System.out.println("Pessoa Juridica excluida.");
+                    } else {
+                        System.out.println("Tipo invalido. Escolha 'F' ou 'J'.");
+                    }
+                    break;
+
+                case 4: // Exibir pelo ID
+                    System.out.println("Escolha o tipo (F - Fisica | J - Juridica):");
+                    String tipoExibir = scanner.nextLine().toUpperCase();
+                    System.out.print("Digite o ID: ");
+                    int idExibir = scanner.nextInt();
+                    scanner.nextLine();
+                    
+                    if (tipoExibir.equals("F")) {
+                        PessoaFisica pessoa = repoFisica.obter(idExibir);
+                        System.out.println(pessoa != null ? pessoa : "Pessoa nao encontrada.");
+                    } else if (tipoExibir.equals("J")) {
+                        PessoaJuridica pessoa = repoJuridica.obter(idExibir);
+                        System.out.println(pessoa != null ? pessoa : "Pessoa nao encontrada.");
+                    } else {
+                        System.out.println("Tipo invalido. Escolha 'F' ou 'J'.");
+                    }
+                    break;
+
+                case 5: // Exibir todos
+                    System.out.println("Escolha o tipo (F - Fisica | J - Juridica):");
+                    String tipoExibirTodos = scanner.nextLine().toUpperCase();
+                    if (tipoExibirTodos.equals("F")) {
+                        ArrayList<PessoaFisica> pessoasFisicas = repoFisica.obterTodos();
+                        if (pessoasFisicas.isEmpty()) {
+                            System.out.println("Nenhuma pessoa fisica cadastrada.");
+                        } else {
+                            for (PessoaFisica pessoa : pessoasFisicas) {
+                                System.out.println(pessoa);
+                            }
+                        }
+                    } else if (tipoExibirTodos.equals("J")) {
+                        ArrayList<PessoaJuridica> pessoasJuridicas = repoJuridica.obterTodos();
+                        if (pessoasJuridicas.isEmpty()) {
+                            System.out.println("Nenhuma pessoa juridica cadastrada.");
+                        } else {
+                            for (PessoaJuridica pessoa : pessoasJuridicas) {
+                                System.out.println(pessoa);
+                            }
+                        }
+                    } else {
+                        System.out.println("Tipo invalido. Escolha 'F' ou 'J'.");
+                    }
+                    break;
+
+                case 6: // Salvar dados
+                    System.out.print("Digite o prefixo dos arquivos: ");
+                    String prefixoSalvar = scanner.nextLine();
+                    try {
+                        repoFisica.persistir(prefixoSalvar + ".fisica.bin");
+                        repoJuridica.persistir(prefixoSalvar + ".juridica.bin");
+                        System.out.println("Dados salvos com sucesso.");
+                    } catch (IOException e) {
+                        System.out.println("Erro ao salvar dados: " + e.getMessage());
+                    }
+                    break;
+
+                case 7: // Recuperar dados
+                    System.out.print("Digite o prefixo dos arquivos: ");
+                    String prefixoRecuperar = scanner.nextLine();
+                    try {
+                        repoFisica.recuperar(prefixoRecuperar + ".fisica.bin");
+                        repoJuridica.recuperar(prefixoRecuperar + ".juridica.bin");
+                        System.out.println("Dados recuperados com sucesso.");
+                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println("Erro ao recuperar dados: " + e.getMessage());
+                    }
+                    break;
+
+                case 0: // Sair
+                    System.out.println("Sistema finalizado.");
+                    break;
+
+                default:
+                    System.out.println("Opcao invalida. Tente novamente.");
+            }
+        } while (opcao != 0);
+
+        scanner.close();
     }
-    
 }
-//
