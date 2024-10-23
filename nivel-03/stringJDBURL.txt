@@ -1,1 +1,0 @@
-jdbc:sqlserver://localhost\MSSQLSERVER01;databaseName=Loja;encrypt=true;trustServerCertificate=false;
